@@ -56,12 +56,17 @@ function App() {
         <section id="home" className="hero section">
           <div className="hero-copy">
             <p className="eyebrow">{site.hero.eyebrow}</p>
+
             <h1>{site.hero.title}</h1>
+
             <p className="hero-body">{site.hero.body}</p>
+
             <div className="button-row">
               <a className="button button--primary" href="#reservations">
-                {site.hero.primaryCta} <ArrowRight size={17} />
+                {site.hero.primaryCta}
+                <ArrowRight size={17} />
               </a>
+
               <a className="button button--ghost" href="#menu">
                 {site.hero.secondaryCta}
               </a>
@@ -72,23 +77,16 @@ function App() {
                 <span>12</span>
                 <small>Seasons celebrated</small>
               </div>
+
               <div>
                 <span>4.9</span>
                 <small>Guest experience</small>
               </div>
+
               <div>
                 <span>100%</span>
                 <small>Made with care</small>
               </div>
-            </div>
-          </div>
-
-          <div className="hero-visual" aria-label="Alora Kitchen dining concept">
-            <div className="hero-visual-glow" />
-            <img src="/images/alora-concept.png" alt="Alora Kitchen concept artwork" />
-            <div className="visual-caption">
-              <span>Alora Kitchen</span>
-              <small>Nairobi · Kenya</small>
             </div>
           </div>
         </section>

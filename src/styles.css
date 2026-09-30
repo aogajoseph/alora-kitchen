@@ -72,15 +72,45 @@ button { font: inherit; }
 
 .section { padding: clamp(80px, 10vw, 145px) clamp(22px, 6vw, 100px); }
 .hero {
+  position: relative;
+  isolation: isolate;
+
   min-height: calc(100vh - 77px);
-  display: grid;
-  grid-template-columns: minmax(0, .9fr) minmax(420px, 1.1fr);
-  gap: clamp(40px, 6vw, 100px);
+
+  display: flex;
   align-items: center;
-  max-width: 1500px;
-  margin: auto;
+
+  max-width: none;
+  margin: 0;
+
+  padding: clamp(80px, 9vw, 130px)
+           clamp(22px, 7vw, 110px);
+
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(244, 240, 231, 0.98) 0%,
+      rgba(244, 240, 231, 0.94) 32%,
+      rgba(244, 240, 231, 0.72) 48%,
+      rgba(244, 240, 231, 0.18) 68%,
+      rgba(244, 240, 231, 0) 100%
+    ),
+    url("/images/alora-concept.png");
+
+  background-size: cover;
+  background-position: center right;
+  background-repeat: no-repeat;
 }
-.hero-copy { padding: 35px 0; }
+
+.hero-copy {
+  position: relative;
+  z-index: 2;
+
+  width: min(100%, 620px);
+  padding: 35px 0;
+}
 .eyebrow {
   margin: 0 0 20px;
   font-size: 10px;
@@ -92,6 +122,7 @@ button { font: inherit; }
 }
 .hero h1, h2 {
   margin: 0;
+  max-width: 620px;
   font: 500 clamp(48px, 6vw, 90px)/.9 var(--serif);
   letter-spacing: -.025em;
 }
@@ -99,7 +130,7 @@ button { font: inherit; }
 h2 { font-size: clamp(50px, 6.4vw, 88px); }
 em { color: var(--olive); font-style: normal; }
 .hero-body {
-  max-width: 520px;
+  max-width: 500px;
   margin: 30px 0;
   color: var(--muted);
   font-size: 15px;
@@ -135,45 +166,6 @@ em { color: var(--olive); font-style: normal; }
 }
 .hero-meta span { display: block; font: 500 28px/1 var(--serif); }
 .hero-meta small { display: block; margin-top: 6px; color: var(--muted); font-size: 9px; letter-spacing: .05em; }
-
-.hero-visual {
-  position: relative;
-  min-height: 680px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  background: #242414;
-}
-.hero-visual img {
-  width: 100%;
-  height: 100%;
-  min-height: 680px;
-  object-fit: cover;
-  opacity: .78;
-  mix-blend-mode: screen;
-}
-.hero-visual-glow {
-  position: absolute;
-  width: 65%;
-  height: 65%;
-  border-radius: 50%;
-  background: #9c842e;
-  filter: blur(110px);
-  opacity: .2;
-}
-.visual-caption {
-  position: absolute;
-  left: 25px;
-  bottom: 25px;
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  color: #fff;
-  text-transform: uppercase;
-}
-.visual-caption span { font: 600 18px var(--serif); letter-spacing: .12em; }
-.visual-caption small { font-size: 9px; letter-spacing: .18em; opacity: .7; }
 
 .section-kicker {
   display: flex;
