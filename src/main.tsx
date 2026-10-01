@@ -1,4 +1,4 @@
-import { StrictMode, useState } from "react";
+import { StrictMode, useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import {
   ArrowRight,
@@ -18,12 +18,31 @@ import "./styles.css";
 
 function App() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [headerScrolled, setHeaderScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setHeaderScrolled(window.scrollY > 24);
+    };
+  
+    handleScroll();
+  
+    window.addEventListener("scroll", handleScroll, { passive: true });
+  
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   const closeMenu = () => setMobileOpen(false);
 
   return (
     <div className="site-shell">
-      <header className="site-header">
+      <header
+        className={`site-header ${
+          headerScrolled ? "site-header--scrolled" : ""
+        }`}
+      >
         <a className="brand" href="#home" onClick={closeMenu} aria-label="Alora Kitchen home">
           <span className="brand-mark">✦</span>
           <span>
