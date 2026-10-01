@@ -43,12 +43,17 @@ function App() {
           headerScrolled ? "site-header--scrolled" : ""
         }`}
       >
-        <a className="brand" href="#home" onClick={closeMenu} aria-label="Alora Kitchen home">
-          <span className="brand-mark">✦</span>
-          <span>
-            <strong>{site.brand}</strong>
-            <small>{site.descriptor}</small>
-          </span>
+        <a
+          className="brand"
+          href="#home"
+          onClick={closeMenu}
+          aria-label="Alora Kitchen home"
+        >
+          <img
+            src="/images/logo.png"
+            alt="Alora Kitchen"
+            className="brand-logo"
+          />
         </a>
 
         <nav className={`nav ${mobileOpen ? "nav--open" : ""}`}>
@@ -57,7 +62,12 @@ function App() {
               {item.label}
             </a>
           ))}
-          <a className="nav-cta" href="#reservations" onClick={closeMenu}>
+
+          <a
+            className="nav-cta"
+            href="#reservations"
+            onClick={closeMenu}
+          >
             Reserve a table
           </a>
         </nav>
@@ -244,29 +254,42 @@ function App() {
       <footer id="contact" className="footer">
         <div className="footer-top">
           <div className="footer-brand">
-            <span className="brand-mark">✦</span>
-            <div>
-              <strong>{site.brand}</strong>
-              <small>{site.descriptor}</small>
-            </div>
+            <a href="#home" aria-label="Alora Kitchen home">
+              <img
+                src="/images/footer-logo.png"
+                alt="Alora Kitchen"
+                className="footer-brand-logo"
+              />
+            </a>
+
             <p>{site.tagline}</p>
           </div>
 
           <div className="footer-column">
             <h3>Visit</h3>
-            <p><MapPin size={15} /> {site.contact.address}</p>
-            <p><Clock3 size={15} /> Mon — Sun · 12pm — late</p>
+            <p>
+              <MapPin size={15} /> {site.contact.address}
+            </p>
+            <p>
+              <Clock3 size={15} /> Mon — Sun · 12pm — late
+            </p>
           </div>
 
           <div className="footer-column">
             <h3>Contact</h3>
-            <a href={`mailto:${site.contact.email}`}><Mail size={15} /> {site.contact.email}</a>
-            <a href={`tel:${site.contact.phone}`}><CalendarDays size={15} /> {site.contact.phone}</a>
+            <a href={`mailto:${site.contact.email}`}>
+              <Mail size={15} /> {site.contact.email}
+            </a>
+            <a href={`tel:${site.contact.phone}`}>
+              <CalendarDays size={15} /> {site.contact.phone}
+            </a>
           </div>
 
           <div className="footer-column">
             <h3>Follow</h3>
-            <a href="#instagram"><Instagram size={15} /> Instagram</a>
+            <a href="#instagram">
+              <Instagram size={15} /> Instagram
+            </a>
           </div>
         </div>
 
