@@ -14,13 +14,16 @@ import {
   X,
 } from "lucide-react";
 
-import { FaInstagram, FaTiktok } from "react-icons/fa";
+import { FaInstagram, FaTiktok, FaFacebook } from "react-icons/fa";
 import { site } from "./content/site";
 import "./styles.css";
+
+import ReservationModal from "./components/ReservationModal";
 
 function App() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [headerScrolled, setHeaderScrolled] = useState(false);
+  const [reservationOpen, setReservationOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -48,6 +51,12 @@ function App() {
   const socialIcons = {
     instagram: <FaInstagram size={15} />,
     tiktok: <FaTiktok size={15} />,
+    facebook: <FaFacebook size={15} />,
+  };
+
+  const openReservations = () => {
+    setMobileOpen(false);
+    setReservationOpen(true);
   };
 
   return (
@@ -79,8 +88,7 @@ function App() {
 
           <a
             className="nav-cta"
-            href="#reservations"
-            onClick={closeMenu}
+            onClick={openReservations}
           >
             Reserve a table
           </a>
@@ -105,9 +113,10 @@ function App() {
             <p className="hero-body">{site.hero.body}</p>
 
             <div className="button-row">
+
               <a
                 className="button button--primary"
-                href="#reservations"
+                onClick={openReservations}
               >
                 {site.hero.primaryCta}
                 <ArrowRight size={17} />
@@ -258,9 +267,7 @@ function App() {
 
             <a
               className="button button--light"
-              href={`mailto:${site.reservations.email}?subject=${encodeURIComponent(
-                site.reservations.subject
-              )}`}
+              onClick={openReservations}
             >
               {site.reservations.cta}
               <ArrowRight size={17} />
@@ -351,7 +358,7 @@ function App() {
           </div>
 
           <div className="footer-column">
-            <h3>Visit</h3>
+            <h3>Visit Us</h3>
 
             <p>
               <MapPin size={15} />
@@ -367,21 +374,7 @@ function App() {
           </div>
 
           <div className="footer-column">
-            <h3>Contact</h3>
-
-            <a href={`mailto:${site.contact.email}`}>
-              <Mail size={15} />
-              {site.contact.email}
-            </a>
-
-            <a href={`tel:${site.contact.phone}`}>
-              <CalendarDays size={15} />
-              {site.contact.phone}
-            </a>
-          </div>
-
-          <div className="footer-column">
-            <h3>Follow</h3>
+            <h3>Connect</h3>
 
             {site.social.map((social) => (
               <a key={social.label} href={social.href}>
@@ -394,6 +387,20 @@ function App() {
               </a>
             ))}
           </div>
+
+          <div className="footer-column">
+            <h3>Contact Us</h3>
+
+            <a href={`mailto:${site.contact.email}`}>
+              <Mail size={15} />
+              {site.contact.email}
+            </a>
+
+            <a href={`tel:${site.contact.phone}`}>
+              <CalendarDays size={15} />
+              {site.contact.phone}
+            </a>
+          </div>
         </div>
 
         <div className="footer-bottom">
@@ -405,6 +412,11 @@ function App() {
           <span>{site.footer.statement}</span>
         </div>
       </footer>
+
+      <ReservationModal
+        open={reservationOpen}
+        onClose={() => setReservationOpen(false)}
+      />
     </div>
   );
 }

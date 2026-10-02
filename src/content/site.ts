@@ -144,9 +144,9 @@ export const site = {
         className: "gallery-tile--large",
       },
       {
-        title: "Good company",
-        image: "/images/good-company.png",
-        alt: "Good company at Alora Kitchen",
+        title: "Quality company",
+        image: "/images/quality-company.png",
+        alt: "Quality company at Alora Kitchen",
         className: "gallery-tile--warm",
       },
       {
@@ -159,18 +159,22 @@ export const site = {
   },
 
   hours: [
-    ["Mon — Thu", "12:00pm — 10:00pm"],
-    ["Fri — Sat", "12:00pm — 11:00pm"],
-    ["Sunday", "12:00pm — 9:00pm"],
+    ["Weekdays", "07:00am — 08:30pm"],
+    ["Weekends & Holidays", "12:00pm — 11:00pm"],
   ],
 
   contact: {
-    address: "Alora House. 114, Bigman Street.",
+    address: "Alora House, 114 Bigman Street.",
     phone: "+254 700 000 000",
     email: "info@alorakitchen.com",
   },
 
   social: [
+    {
+      label: "Facebook",
+      href: "#facebook",
+      icon: "facebook",
+    },
     {
       label: "Instagram",
       href: "#instagram",
