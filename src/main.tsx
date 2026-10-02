@@ -162,40 +162,53 @@ function App() {
           <div className="section-heading">
             <div>
               <p className="eyebrow">02 · From the kitchen</p>
-              <h2>Chef's <em>recommendations.</em></h2>
+              <h2>
+                Chef's <em>recommendations.</em>
+              </h2>
             </div>
+
             <a className="text-link" href="#reservations">
               View full menu <ArrowRight size={16} />
             </a>
           </div>
 
           <div className="menu-grid">
-            {site.menu.map((item, index) => (
-              <article className="menu-card" key={item.name}>
-                <div className={`dish-art dish-art--${index + 1}`}>
-                  <div className="dish-plate">
-                    <div className="dish-center" />
-                    <div className="dish-garnish garnish-a" />
-                    <div className="dish-garnish garnish-b" />
-                    <div className="dish-garnish garnish-c" />
+            {site.menu.map((item, index) => {
+              const dishImages = [
+                "/images/herb-crusted-lamb-rack.png",
+                "/images/seared-scallops.png",
+                "/images/wild-mushroom-tagliatelle.png",
+                "/images/chocolate-delice.png",
+              ];
+
+              return (
+                <article className="menu-card" key={item.name}>
+                  <div className={`dish-art dish-art--${index + 1}`}>
+                    <img
+                      src={dishImages[index]}
+                      alt={item.name}
+                      className="dish-image"
+                    />
+
+                    <span className="dish-tag">{item.tag}</span>
                   </div>
-                  <span className="dish-tag">{item.tag}</span>
-                </div>
-                <div className="menu-card-copy">
-                  <span>{item.category}</span>
-                  <h3>{item.name}</h3>
-                  <strong>{item.price}</strong>
-                </div>
-              </article>
-            ))}
+
+                  <div className="menu-card-copy">
+                    <span>{item.category}</span>
+                    <h3>{item.name}</h3>
+                    <strong>{item.price}</strong>
+                  </div>
+                </article>
+              );
+            })}
           </div>
         </section>
 
         <section id="reservations" className="reservation section">
           <div className="reservation-card">
             <div>
-              <p className="eyebrow">03 · Reservations</p>
-              <h2>Make a moment <em>of it.</em></h2>
+              <p className="eyebrow reservations-label">03 · Reservations</p>
+              <h2>Make a moment <em className="reservations-emphasis">of it.</em></h2>
               <p>
                 Join us for dinner, a special celebration or an evening that
                 deserves a beautiful table.
@@ -209,13 +222,11 @@ function App() {
 
         <section id="private-dining" className="split-section section">
           <div className="split-image">
-            <div className="arch-window">
-              <div className="arch-table">
-                <span />
-                <span />
-                <span />
-              </div>
-            </div>
+            <img
+              src="/images/private-dining.png"
+              alt="Private dining room"
+              className="private-dining-image"
+            />
           </div>
           <div className="split-copy">
             <p className="eyebrow">Private dining</p>
@@ -238,13 +249,27 @@ function App() {
             </div>
           </div>
           <div className="gallery-grid">
-            <div className="gallery-tile gallery-tile--large">
+            <div className="gallery-tile">
+              <img
+                src="/images/slow-evenings.png"
+                alt="Slow evenings at Alora Kitchen"
+              />
               <span>Slow evenings</span>
             </div>
-            <div className="gallery-tile gallery-tile--warm">
+
+            <div className="gallery-tile">
+              <img
+                src="/images/good-company.png"
+                alt="Good company at Alora Kitchen"
+              />
               <span>Good company</span>
             </div>
+
             <div className="gallery-tile gallery-tile--dark">
+              <img
+                src="/images/fine-details.png"
+                alt="Fine details at Alora Kitchen"
+              />
               <span>Fine details</span>
             </div>
           </div>
