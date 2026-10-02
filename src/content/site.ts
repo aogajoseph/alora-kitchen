@@ -38,10 +38,10 @@ export const site = {
     },
   ],
   menu: [
-    { category: "From the kitchen", name: "Herb Crusted Lamb Rack", price: "KES 3,950", tag: "Chef's recommendation" },
-    { category: "From the sea", name: "Seared Scallops", price: "KES 3,250", tag: "Seasonal" },
-    { category: "Pasta", name: "Wild Mushroom Tagliatelle", price: "KES 2,450", tag: "House favourite" },
-    { category: "Dessert", name: "Chocolate Delice", price: "KES 1,350", tag: "To finish" },
+    { category: "From the kitchen", name: "Herb Crusted Lamb Rack", price: "3,950/=", tag: "Chef's recommendation" },
+    { category: "From the sea", name: "Seared Scallops", price: "3,250/=", tag: "Seasonal" },
+    { category: "Pasta", name: "Wild Mushroom Tagliatelle", price: "2,450/=", tag: "House favourite" },
+    { category: "Dessert", name: "Chocolate Delice", price: "1,350/=", tag: "To finish" },
   ],
   hours: [
     ["Mon — Thu", "12:00pm — 10:00pm"],
@@ -49,8 +49,8 @@ export const site = {
     ["Sunday", "12:00pm — 9:00pm"],
   ],
   contact: {
-    address: "The Alora House, Nairobi",
+    address: "Alora House. 114, Bigman Street.",
     phone: "+254 700 000 000",
-    email: "hello@alorakitchen.com",
+    email: "info@alorakitchen.com",
   },
 };

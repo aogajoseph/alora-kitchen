@@ -1,11 +1,11 @@
 import { StrictMode, useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
+
 import {
   ArrowRight,
   CalendarDays,
   ChefHat,
   Clock3,
-  Instagram,
   Mail,
   MapPin,
   Menu as MenuIcon,
@@ -13,6 +13,8 @@ import {
   Utensils,
   X,
 } from "lucide-react";
+
+import { FaInstagram, FaTiktok } from "react-icons/fa";
 import { site } from "./content/site";
 import "./styles.css";
 
@@ -104,17 +106,17 @@ function App() {
             <div className="hero-meta">
               <div>
                 <span>12</span>
-                <small>Seasons celebrated</small>
+                <small>Seasons Celebrated</small>
               </div>
 
               <div>
                 <span>4.9</span>
-                <small>Guest experience</small>
+                <small>Star Rating</small>
               </div>
 
               <div>
                 <span>100%</span>
-                <small>Made with care</small>
+                <small>Seasonal Ingredients</small>
               </div>
             </div>
           </div>
@@ -122,8 +124,8 @@ function App() {
 
         <section id="about" className="intro section">
           <div className="section-kicker">
-            <span>01</span>
-            <span>Our philosophy</span>
+            <span>02</span>
+            <span>About Us</span>
           </div>
           <div className="intro-grid">
             <h2>Where taste meets <em>experience.</em></h2>
@@ -133,8 +135,8 @@ function App() {
                 ingredients, thoughtful preparation and the joy of gathering
                 around the table.
               </p>
-              <a className="text-link" href="#menu">
-                Discover our story <ArrowRight size={16} />
+              <a className="text-link" href="">
+                Learn More <ArrowRight size={16} />
               </a>
             </div>
           </div>
@@ -144,7 +146,7 @@ function App() {
           <div className="highlights-grid">
             {site.highlights.map((item, index) => (
               <article className="highlight" key={item.title}>
-                <span className="highlight-number">0{index + 1}</span>
+                <span className="highlight-number">_0{index + 1}</span>
                 <div className="icon-circle">
                   {index === 0 && <Sparkles size={18} />}
                   {index === 1 && <ChefHat size={18} />}
@@ -161,13 +163,13 @@ function App() {
         <section id="menu" className="menu-section section">
           <div className="section-heading">
             <div>
-              <p className="eyebrow">02 · From the kitchen</p>
+              <p className="eyebrow">03 · From the kitchen</p>
               <h2>
                 Chef's <em>recommendations.</em>
               </h2>
             </div>
 
-            <a className="text-link" href="#reservations">
+            <a className="text-link" href="">
               View full menu <ArrowRight size={16} />
             </a>
           </div>
@@ -207,7 +209,7 @@ function App() {
         <section id="reservations" className="reservation section">
           <div className="reservation-card">
             <div>
-              <p className="eyebrow reservations-label">03 · Reservations</p>
+              <p className="eyebrow reservations-label">04 · Reservations</p>
               <h2>Make a moment <em className="reservations-emphasis">of it.</em></h2>
               <p>
                 Join us for dinner, a special celebration or an evening that
@@ -215,7 +217,7 @@ function App() {
               </p>
             </div>
             <a className="button button--light" href="mailto:hello@alorakitchen.com?subject=Table reservation">
-              Request a table <ArrowRight size={17} />
+              Reserve a table <ArrowRight size={17} />
             </a>
           </div>
         </section>
@@ -229,14 +231,13 @@ function App() {
             />
           </div>
           <div className="split-copy">
-            <p className="eyebrow">Private dining</p>
+            <p className="eyebrow">05 · Private dining</p>
             <h2>Gather beautifully.</h2>
             <p>
-              From intimate dinners to brand events and milestone celebrations,
-              our private dining experience is designed around your occasion.
+              From intimate dinners to private events and milestone celebrations, our private dining experience is designed around your occasion.
             </p>
             <a className="text-link" href="mailto:hello@alorakitchen.com?subject=Private dining enquiry">
-              Enquire about private dining <ArrowRight size={16} />
+              Book Now <ArrowRight size={16} />
             </a>
           </div>
         </section>
@@ -244,8 +245,8 @@ function App() {
         <section id="gallery" className="gallery section">
           <div className="section-heading">
             <div>
-              <p className="eyebrow">04 · The Alora mood</p>
-              <h2>A table worth <em>remembering.</em></h2>
+              <p className="eyebrow">06 · The Alora mood</p>
+              <h2>An experience to <em>Remember.</em></h2>
             </div>
           </div>
           <div className="gallery-grid">
@@ -259,10 +260,10 @@ function App() {
 
             <div className="gallery-tile">
               <img
-                src="/images/good-company.png"
-                alt="Good company at Alora Kitchen"
+                src="/images/quality-company.png"
+                alt="Quality company at Alora Kitchen"
               />
-              <span>Good company</span>
+              <span>Quality company</span>
             </div>
 
             <div className="gallery-tile gallery-tile--dark">
@@ -270,7 +271,7 @@ function App() {
                 src="/images/fine-details.png"
                 alt="Fine details at Alora Kitchen"
               />
-              <span>Fine details</span>
+              <span>Quiet elegance</span>
             </div>
           </div>
         </section>
@@ -312,15 +313,20 @@ function App() {
 
           <div className="footer-column">
             <h3>Follow</h3>
+
             <a href="#instagram">
-              <Instagram size={15} /> Instagram
+              <FaInstagram size={15} /> Instagram
+            </a>
+
+            <a href="#tiktok">
+              <FaTiktok size={15} /> TikTok
             </a>
           </div>
         </div>
 
         <div className="footer-bottom">
           <span>© {new Date().getFullYear()} Alora Kitchen. All rights reserved.</span>
-          <span>Crafted for memorable moments.</span>
+          <span>Contemporary dining rooted in tradition.</span>
         </div>
       </footer>
     </div>
