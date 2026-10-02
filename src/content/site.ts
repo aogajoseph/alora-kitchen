@@ -125,7 +125,7 @@ export const site = {
     title: "Gather beautifully.",
     body:
       "From intimate dinners to private events and milestone celebrations, our private dining experience is designed around your occasion.",
-    cta: "Book Now",
+    cta: "Book a Private Table",
     email: "hello@alorakitchen.com",
     subject: "Private dining enquiry",
     image: "/images/private-dining.png",

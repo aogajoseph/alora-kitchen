@@ -1160,6 +1160,10 @@ body.modal-open {
   object-fit: cover;
 }
 
+.private-dining-cta:hover {
+  cursor: pointer;
+}
+
 .split-copy {
   max-width: 520px;
 }

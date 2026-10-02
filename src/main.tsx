@@ -19,11 +19,13 @@ import { site } from "./content/site";
 import "./styles.css";
 
 import ReservationModal from "./components/ReservationModal";
+import PrivateDiningModal from "./components/PrivateDiningModal";
 
 function App() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [headerScrolled, setHeaderScrolled] = useState(false);
   const [reservationOpen, setReservationOpen] = useState(false);
+  const [privateDiningOpen, setPrivateDiningOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -57,6 +59,11 @@ function App() {
   const openReservations = () => {
     setMobileOpen(false);
     setReservationOpen(true);
+  };
+
+  const openPrivateDining = () => {
+    setMobileOpen(false);
+    setPrivateDiningOpen(true);
   };
 
   return (
@@ -297,10 +304,8 @@ function App() {
             <p>{site.privateDining.body}</p>
 
             <a
-              className="text-link"
-              href={`mailto:${site.privateDining.email}?subject=${encodeURIComponent(
-                site.privateDining.subject
-              )}`}
+              className="text-link private-dining-cta"
+              onClick={openPrivateDining}
             >
               {site.privateDining.cta}
               <ArrowRight size={16} />
@@ -416,6 +421,11 @@ function App() {
       <ReservationModal
         open={reservationOpen}
         onClose={() => setReservationOpen(false)}
+      />
+
+      <PrivateDiningModal
+        open={privateDiningOpen}
+        onClose={() => setPrivateDiningOpen(false)}
       />
     </div>
   );
