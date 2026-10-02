@@ -26,17 +26,29 @@ function App() {
     const handleScroll = () => {
       setHeaderScrolled(window.scrollY > 24);
     };
-  
+
     handleScroll();
-  
+
     window.addEventListener("scroll", handleScroll, { passive: true });
-  
+
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
   const closeMenu = () => setMobileOpen(false);
+
+  const highlightIcons = {
+    sparkles: <Sparkles size={18} />,
+    chef: <ChefHat size={18} />,
+    utensils: <Utensils size={18} />,
+    calendar: <CalendarDays size={18} />,
+  };
+
+  const socialIcons = {
+    instagram: <FaInstagram size={15} />,
+    tiktok: <FaTiktok size={15} />,
+  };
 
   return (
     <div className="site-shell">
@@ -49,11 +61,11 @@ function App() {
           className="brand"
           href="#home"
           onClick={closeMenu}
-          aria-label="Alora Kitchen home"
+          aria-label={`${site.brand} ${site.descriptor} home`}
         >
           <img
             src="/images/logo.png"
-            alt="Alora Kitchen"
+            alt={`${site.brand} ${site.descriptor}`}
             className="brand-logo"
           />
         </a>
@@ -93,50 +105,54 @@ function App() {
             <p className="hero-body">{site.hero.body}</p>
 
             <div className="button-row">
-              <a className="button button--primary" href="#reservations">
+              <a
+                className="button button--primary"
+                href="#reservations"
+              >
                 {site.hero.primaryCta}
                 <ArrowRight size={17} />
               </a>
 
-              <a className="button button--ghost" href="#menu">
+              <a
+                className="button button--ghost"
+                href="#menu"
+              >
                 {site.hero.secondaryCta}
               </a>
             </div>
 
             <div className="hero-meta">
-              <div>
-                <span>12</span>
-                <small>Seasons Celebrated</small>
-              </div>
-
-              <div>
-                <span>4.9</span>
-                <small>Star Rating</small>
-              </div>
-
-              <div>
-                <span>100%</span>
-                <small>Seasonal Ingredients</small>
-              </div>
+              {site.hero.stats.map((stat) => (
+                <div key={stat.label}>
+                  <span>{stat.value}</span>
+                  <small>{stat.label}</small>
+                </div>
+              ))}
             </div>
           </div>
         </section>
 
         <section id="about" className="intro section">
           <div className="section-kicker">
-            <span>02</span>
-            <span>About Us</span>
+            <span>{site.about.sectionNumber}</span>
+            <span>{site.about.eyebrow}</span>
           </div>
+
           <div className="intro-grid">
-            <h2>Where taste meets <em>experience.</em></h2>
+            <h2>
+              {site.about.title}{" "}
+              <em>{site.about.emphasis}</em>
+            </h2>
+
             <div>
-              <p>
-                Alora Kitchen is a modern restaurant celebrating seasonal
-                ingredients, thoughtful preparation and the joy of gathering
-                around the table.
-              </p>
-              <a className="text-link" href="">
-                Learn More <ArrowRight size={16} />
+              <p>{site.about.body}</p>
+
+              <a
+                className="text-link"
+                href={site.about.href}
+              >
+                {site.about.cta}
+                <ArrowRight size={16} />
               </a>
             </div>
           </div>
@@ -145,14 +161,22 @@ function App() {
         <section className="highlights">
           <div className="highlights-grid">
             {site.highlights.map((item, index) => (
-              <article className="highlight" key={item.title}>
-                <span className="highlight-number">_0{index + 1}</span>
+              <article
+                className="highlight"
+                key={item.title}
+              >
+                <span className="highlight-number">
+                  _0{index + 1}
+                </span>
+
                 <div className="icon-circle">
-                  {index === 0 && <Sparkles size={18} />}
-                  {index === 1 && <ChefHat size={18} />}
-                  {index === 2 && <Utensils size={18} />}
-                  {index === 3 && <CalendarDays size={18} />}
+                  {
+                    highlightIcons[
+                      item.icon as keyof typeof highlightIcons
+                    ]
+                  }
                 </div>
+
                 <h3>{item.title}</h3>
                 <p>{item.body}</p>
               </article>
@@ -163,81 +187,116 @@ function App() {
         <section id="menu" className="menu-section section">
           <div className="section-heading">
             <div>
-              <p className="eyebrow">03 · From the kitchen</p>
+              <p className="eyebrow">
+                {site.menuSection.eyebrow}
+              </p>
+
               <h2>
-                Chef's <em>recommendations.</em>
+                {site.menuSection.title}{" "}
+                <em>{site.menuSection.emphasis}</em>
               </h2>
             </div>
 
-            <a className="text-link" href="">
-              View full menu <ArrowRight size={16} />
+            <a
+              className="text-link"
+              href={site.menuSection.href}
+            >
+              {site.menuSection.cta}
+              <ArrowRight size={16} />
             </a>
           </div>
 
           <div className="menu-grid">
-            {site.menu.map((item, index) => {
-              const dishImages = [
-                "/images/herb-crusted-lamb-rack.png",
-                "/images/seared-scallops.png",
-                "/images/wild-mushroom-tagliatelle.png",
-                "/images/chocolate-delice.png",
-              ];
+            {site.menu.map((item, index) => (
+              <article
+                className="menu-card"
+                key={item.name}
+              >
+                <div
+                  className={`dish-art dish-art--${index + 1}`}
+                >
+                  <img
+                    src={item.image}
+                    alt={item.name}
+                    className="dish-image"
+                  />
 
-              return (
-                <article className="menu-card" key={item.name}>
-                  <div className={`dish-art dish-art--${index + 1}`}>
-                    <img
-                      src={dishImages[index]}
-                      alt={item.name}
-                      className="dish-image"
-                    />
+                  <span className="dish-tag">
+                    {item.tag}
+                  </span>
+                </div>
 
-                    <span className="dish-tag">{item.tag}</span>
-                  </div>
-
-                  <div className="menu-card-copy">
-                    <span>{item.category}</span>
-                    <h3>{item.name}</h3>
-                    <strong>{item.price}</strong>
-                  </div>
-                </article>
-              );
-            })}
+                <div className="menu-card-copy">
+                  <span>{item.category}</span>
+                  <h3>{item.name}</h3>
+                  <strong>{item.price}</strong>
+                </div>
+              </article>
+            ))}
           </div>
         </section>
 
-        <section id="reservations" className="reservation section">
+        <section
+          id="reservations"
+          className="reservation section"
+        >
           <div className="reservation-card">
             <div>
-              <p className="eyebrow reservations-label">04 · Reservations</p>
-              <h2>Make a moment <em className="reservations-emphasis">of it.</em></h2>
-              <p>
-                Join us for dinner, a special celebration or an evening that
-                deserves a beautiful table.
+              <p className="eyebrow reservations-label">
+                {site.reservations.eyebrow}
               </p>
+
+              <h2>
+                {site.reservations.title}{" "}
+                <em className="reservations-emphasis">
+                  {site.reservations.emphasis}
+                </em>
+              </h2>
+
+              <p>{site.reservations.body}</p>
             </div>
-            <a className="button button--light" href="mailto:hello@alorakitchen.com?subject=Table reservation">
-              Reserve a table <ArrowRight size={17} />
+
+            <a
+              className="button button--light"
+              href={`mailto:${site.reservations.email}?subject=${encodeURIComponent(
+                site.reservations.subject
+              )}`}
+            >
+              {site.reservations.cta}
+              <ArrowRight size={17} />
             </a>
           </div>
         </section>
 
-        <section id="private-dining" className="split-section section">
+        <section
+          id="private-dining"
+          className="split-section section"
+        >
           <div className="split-image">
             <img
-              src="/images/private-dining.png"
-              alt="Private dining room"
+              src={site.privateDining.image}
+              alt={site.privateDining.imageAlt}
               className="private-dining-image"
             />
           </div>
+
           <div className="split-copy">
-            <p className="eyebrow">05 · Private dining</p>
-            <h2>Gather beautifully.</h2>
-            <p>
-              From intimate dinners to private events and milestone celebrations, our private dining experience is designed around your occasion.
+            <p className="eyebrow">
+              {site.privateDining.eyebrow}
             </p>
-            <a className="text-link" href="mailto:hello@alorakitchen.com?subject=Private dining enquiry">
-              Book Now <ArrowRight size={16} />
+
+            <h2>{site.privateDining.title}</h2>
+
+            <p>{site.privateDining.body}</p>
+
+            <a
+              className="text-link"
+              href={`mailto:${site.privateDining.email}?subject=${encodeURIComponent(
+                site.privateDining.subject
+              )}`}
+            >
+              {site.privateDining.cta}
+              <ArrowRight size={16} />
             </a>
           </div>
         </section>
@@ -245,34 +304,31 @@ function App() {
         <section id="gallery" className="gallery section">
           <div className="section-heading">
             <div>
-              <p className="eyebrow">06 · The Alora mood</p>
-              <h2>An experience to <em>Remember.</em></h2>
+              <p className="eyebrow">
+                {site.gallery.eyebrow}
+              </p>
+
+              <h2>
+                {site.gallery.title}{" "}
+                <em>{site.gallery.emphasis}</em>
+              </h2>
             </div>
           </div>
+
           <div className="gallery-grid">
-            <div className="gallery-tile">
-              <img
-                src="/images/slow-evenings.png"
-                alt="Slow evenings at Alora Kitchen"
-              />
-              <span>Slow evenings</span>
-            </div>
+            {site.gallery.items.map((item) => (
+              <div
+                className={`gallery-tile ${item.className}`}
+                key={item.title}
+              >
+                <img
+                  src={item.image}
+                  alt={item.alt}
+                />
 
-            <div className="gallery-tile">
-              <img
-                src="/images/quality-company.png"
-                alt="Quality company at Alora Kitchen"
-              />
-              <span>Quality company</span>
-            </div>
-
-            <div className="gallery-tile gallery-tile--dark">
-              <img
-                src="/images/fine-details.png"
-                alt="Fine details at Alora Kitchen"
-              />
-              <span>Quiet elegance</span>
-            </div>
+                <span>{item.title}</span>
+              </div>
+            ))}
           </div>
         </section>
       </main>
@@ -280,10 +336,13 @@ function App() {
       <footer id="contact" className="footer">
         <div className="footer-top">
           <div className="footer-brand">
-            <a href="#home" aria-label="Alora Kitchen home">
+            <a
+              href="#home"
+              aria-label={`${site.brand} ${site.descriptor} home`}
+            >
               <img
                 src="/images/footer-logo.png"
-                alt="Alora Kitchen"
+                alt={`${site.brand} ${site.descriptor}`}
                 className="footer-brand-logo"
               />
             </a>
@@ -293,40 +352,57 @@ function App() {
 
           <div className="footer-column">
             <h3>Visit</h3>
+
             <p>
-              <MapPin size={15} /> {site.contact.address}
+              <MapPin size={15} />
+              {site.contact.address}
             </p>
-            <p>
-              <Clock3 size={15} /> Mon — Sun · 12pm — late
-            </p>
+
+            {site.hours.map(([days, hours]) => (
+              <p key={days}>
+                <Clock3 size={15} />
+                {days} · {hours}
+              </p>
+            ))}
           </div>
 
           <div className="footer-column">
             <h3>Contact</h3>
+
             <a href={`mailto:${site.contact.email}`}>
-              <Mail size={15} /> {site.contact.email}
+              <Mail size={15} />
+              {site.contact.email}
             </a>
+
             <a href={`tel:${site.contact.phone}`}>
-              <CalendarDays size={15} /> {site.contact.phone}
+              <CalendarDays size={15} />
+              {site.contact.phone}
             </a>
           </div>
 
           <div className="footer-column">
             <h3>Follow</h3>
 
-            <a href="#instagram">
-              <FaInstagram size={15} /> Instagram
-            </a>
-
-            <a href="#tiktok">
-              <FaTiktok size={15} /> TikTok
-            </a>
+            {site.social.map((social) => (
+              <a key={social.label} href={social.href}>
+                {
+                  socialIcons[
+                    social.icon as keyof typeof socialIcons
+                  ]
+                }
+                {social.label}
+              </a>
+            ))}
           </div>
         </div>
 
         <div className="footer-bottom">
-          <span>© {new Date().getFullYear()} Alora Kitchen. All rights reserved.</span>
-          <span>Contemporary dining rooted in tradition.</span>
+          <span>
+            © {new Date().getFullYear()} {site.brand}{" "}
+            {site.descriptor}. {site.footer.copyright}
+          </span>
+
+          <span>{site.footer.statement}</span>
         </div>
       </footer>
     </div>
