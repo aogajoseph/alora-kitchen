@@ -11,12 +11,14 @@ import "./styles.css";
 
 export default function Menu() {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
   const [activeCategory, setActiveCategory] = useState(menuCategories[0]?.id);
   const [reservationOpen, setReservationOpen] = useState(false);
+  const [orderItem, setOrderItem] = useState<(typeof site.menu)[number] | null>(
+    null
+  );
 
   const openOrder = (item: MenuItem) => {
-    setSelectedItem(item);
+    setOrderItem(item);
   };
 
   useEffect(() => {
@@ -248,9 +250,9 @@ export default function Menu() {
       </footer>
 
       <OrderNowModal
-        item={selectedItem}
-        open={Boolean(selectedItem)}
-        onClose={() => setSelectedItem(null)}
+        item={orderItem}
+        open={Boolean(orderItem)}
+        onClose={() => setOrderItem(null)}
       />
 
       <ReservationModal
