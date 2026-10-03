@@ -1169,7 +1169,10 @@ em {
     cursor: pointer;
   
     font: 500 12px var(--sans);
+    font-weight: 600;
+    font-size: 12px;
     letter-spacing: 0.03em;
+    text-transform: uppercase;
   
     transition:
       gap 180ms ease,
@@ -1180,6 +1183,7 @@ em {
   .menu-item__order:hover {
     gap: 13px;
     border-color: #171713;
+    color: #3b3b36;
   }
   
   
