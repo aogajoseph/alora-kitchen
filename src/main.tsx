@@ -21,6 +21,7 @@ import "./styles.css";
 import ReservationModal from "./components/ReservationModal";
 import PrivateDiningModal from "./components/PrivateDiningModal";
 import OrderNowModal from "./components/OrderNowModal";
+import Menu from "./Menu";
 
 function App() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -455,8 +456,10 @@ function App() {
 
 export default App;
 
+const isMenuPage = window.location.pathname === "/menu";
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <App />
+    {isMenuPage ? <Menu /> : <App />}
   </StrictMode>
 );

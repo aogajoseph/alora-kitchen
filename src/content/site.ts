@@ -75,7 +75,7 @@ export const site = {
     title: "Chef's",
     emphasis: "recommendations.",
     cta: "View full menu",
-    href: "#reservations",
+    href: "/menu",
   },
 
   menu: [
