@@ -11,14 +11,12 @@ import "./styles.css";
 
 export default function Menu() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
   const [activeCategory, setActiveCategory] = useState(menuCategories[0]?.id);
   const [reservationOpen, setReservationOpen] = useState(false);
-  const [orderItem, setOrderItem] = useState<(typeof site.menu)[number] | null>(
-    null
-  );
 
   const openOrder = (item: MenuItem) => {
-    setOrderItem(item);
+    setSelectedItem(item);
   };
 
   useEffect(() => {
@@ -220,10 +218,14 @@ export default function Menu() {
           Order your favourites online or request a table to join us.
         </p>
 
-        <a className="menu-closing__cta" onClick={openReservations}>
+        <button 
+          type="button"
+          className="menu-closing__cta" 
+          onClick={openReservations}
+        >
           Reserve a table
           <ArrowRight size={16} />
-        </a>
+        </button>
 
         <button
           className="menu-toggle"
@@ -250,9 +252,9 @@ export default function Menu() {
       </footer>
 
       <OrderNowModal
-        item={orderItem}
-        open={Boolean(orderItem)}
-        onClose={() => setOrderItem(null)}
+        item={selectedItem}
+        open={Boolean(selectedItem)}
+        onClose={() => setSelectedItem(null)}
       />
 
       <ReservationModal

@@ -1,4 +1,5 @@
 import { FormEvent, useEffect, useMemo, useState } from "react";
+
 import {
   ArrowLeft,
   ArrowRight,
@@ -12,17 +13,10 @@ import {
   X,
 } from "lucide-react";
 
-type OrderItem = {
-  category: string;
-  name: string;
-  price: string;
-  priceValue: number;
-  tag: string;
-  image: string;
-};
+import { type MenuItem } from "../content/menu";
 
 type OrderNowModalProps = {
-  item: OrderItem | null;
+  item: MenuItem | null;
   open: boolean;
   onClose: () => void;
 };
