@@ -20,12 +20,16 @@ import "./styles.css";
 
 import ReservationModal from "./components/ReservationModal";
 import PrivateDiningModal from "./components/PrivateDiningModal";
+import OrderNowModal from "./components/OrderNowModal";
 
 function App() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [headerScrolled, setHeaderScrolled] = useState(false);
   const [reservationOpen, setReservationOpen] = useState(false);
   const [privateDiningOpen, setPrivateDiningOpen] = useState(false);
+  const [orderItem, setOrderItem] = useState<(typeof site.menu)[number] | null>(
+    null
+  );
 
   useEffect(() => {
     const handleScroll = () => {
@@ -64,6 +68,10 @@ function App() {
   const openPrivateDining = () => {
     setMobileOpen(false);
     setPrivateDiningOpen(true);
+  };
+
+  const openOrderNow = (item: (typeof site.menu)[number]) => {
+    setOrderItem(item);
   };
 
   return (
@@ -182,7 +190,7 @@ function App() {
                 key={item.title}
               >
                 <span className="highlight-number">
-                  _0{index + 1}
+                  · 0{index + 1}
                 </span>
 
                 <div className="icon-circle">
@@ -236,16 +244,24 @@ function App() {
                     alt={item.name}
                     className="dish-image"
                   />
-
+              
                   <span className="dish-tag">
                     {item.tag}
                   </span>
                 </div>
-
+              
                 <div className="menu-card-copy">
                   <span>{item.category}</span>
                   <h3>{item.name}</h3>
                   <strong>{item.price}</strong>
+              
+                  <a
+                    className="text-link"
+                    onClick={() => openOrderNow(item)}
+                  >
+                    Order now
+                    <ArrowRight size={16} />
+                  </a>
                 </div>
               </article>
             ))}
@@ -426,6 +442,12 @@ function App() {
       <PrivateDiningModal
         open={privateDiningOpen}
         onClose={() => setPrivateDiningOpen(false)}
+      />
+
+      <OrderNowModal
+        item={orderItem}
+        open={Boolean(orderItem)}
+        onClose={() => setOrderItem(null)}
       />
     </div>
   );
