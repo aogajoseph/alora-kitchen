@@ -1,8 +1,9 @@
 export type MenuItem = {
   name: string;
-  description: string;
   price: string;
   priceValue: number;
+  category?: string;
+  description?: string;
   tag?: string;
   image?: string;
 };

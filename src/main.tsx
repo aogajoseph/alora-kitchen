@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 
 import { FaInstagram, FaTiktok, FaFacebook } from "react-icons/fa";
+import { type MenuItem } from "./content/menu";
 import { site } from "./content/site";
 import "./styles.css";
 
@@ -28,9 +29,7 @@ function App() {
   const [headerScrolled, setHeaderScrolled] = useState(false);
   const [reservationOpen, setReservationOpen] = useState(false);
   const [privateDiningOpen, setPrivateDiningOpen] = useState(false);
-  const [orderItem, setOrderItem] = useState<(typeof site.menu)[number] | null>(
-    null
-  );
+  const [orderItem, setOrderItem] = useState<MenuItem | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -71,7 +70,7 @@ function App() {
     setPrivateDiningOpen(true);
   };
 
-  const openOrderNow = (item: (typeof site.menu)[number]) => {
+  const openOrderNow = (item: MenuItem) => {
     setOrderItem(item);
   };
 

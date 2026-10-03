@@ -1,3 +1,5 @@
+import { type MenuItem } from "./menu";
+
 export const site = {
   brand: "ALORA",
   descriptor: "KITCHEN",
@@ -111,7 +113,7 @@ export const site = {
       tag: "To finish",
       image: "/images/chocolate-delice.png",
     },
-  ],
+  ] satisfies MenuItem[],
 
   reservations: {
     eyebrow: "04 · Reservations",

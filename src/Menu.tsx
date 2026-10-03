@@ -188,7 +188,12 @@ export default function Menu() {
                     <button
                       type="button"
                       className="menu-item__order"
-                      onClick={() => openOrder(item)}
+                      onClick={() =>
+                        openOrder({
+                          ...item,
+                          category: category.label,
+                        })
+                      }
                     >
                       <ShoppingBag size={15} />
                       Order now
