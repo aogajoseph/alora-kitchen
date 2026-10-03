@@ -25,6 +25,16 @@ type PrivateDiningForm = {
   requests: string;
 };
 
+type Status =
+  | "idle"
+  | "submitting"
+  | "success"
+  | "error"
+  | "integration";
+
+const integrationMessage =
+  "You're currently viewing a website template. Private dining enquiries will be available once the live website is connected to the restaurant's booking system.";
+
 const initialForm: PrivateDiningForm = {
   eventType: "",
   date: "",
@@ -43,9 +53,7 @@ export default function PrivateDiningModal({
   const [form, setForm] =
     useState<PrivateDiningForm>(initialForm);
 
-  const [status, setStatus] = useState<
-    "idle" | "submitting" | "success" | "error"
-  >("idle");
+  const [status, setStatus] = useState<Status>("idle");
 
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -84,10 +92,10 @@ export default function PrivateDiningModal({
     event: FormEvent<HTMLFormElement>
   ) => {
     event.preventDefault();
-
+  
     setStatus("submitting");
     setErrorMessage("");
-
+  
     try {
       const response = await fetch("/api/private-dining", {
         method: "POST",
@@ -96,25 +104,45 @@ export default function PrivateDiningModal({
         },
         body: JSON.stringify(form),
       });
-
-      const data = await response.json();
-
+  
+      // The backend isn't connected yet.
+      if (response.status === 404 || response.status === 405) {
+        setStatus("integration");
+        setErrorMessage(integrationMessage);
+        return;
+      }
+  
+      const responseText = await response.text();
+  
+      let data: {
+        message?: string;
+        error?: string;
+      } = {};
+  
+      if (responseText.trim()) {
+        try {
+          data = JSON.parse(responseText);
+        } catch {
+          setStatus("integration");
+          setErrorMessage(integrationMessage);
+          return;
+        }
+      }
+  
       if (!response.ok) {
-        throw new Error(
-          data?.message ||
+        setStatus("error");
+        setErrorMessage(
+          data.message ||
+            data.error ||
             "We couldn't send your private dining enquiry."
         );
+        return;
       }
-
+  
       setStatus("success");
-    } catch (error) {
-      setStatus("error");
-
-      setErrorMessage(
-        error instanceof Error
-          ? error.message
-          : "Something went wrong. Please try again."
-      );
+    } catch {
+      setStatus("integration");
+      setErrorMessage(integrationMessage);
     }
   };
 
@@ -361,6 +389,16 @@ export default function PrivateDiningModal({
                 />
               </label>
 
+              {status === "integration" && (
+                <div
+                  className="reservation-form__notice"
+                  role="status"
+                >
+                  <strong>Private Dining system coming soon. </strong>
+                  <span>{errorMessage}</span>
+                </div>
+              )}
+
               {status === "error" && (
                 <div
                   className="reservation-form__error"
@@ -377,7 +415,7 @@ export default function PrivateDiningModal({
               >
                 {status === "submitting"
                   ? "Sending enquiry..."
-                  : "Book a private table"}
+                  : "Book a private experience"}
               </button>
 
               <p className="reservation-form__note">

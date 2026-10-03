@@ -24,6 +24,13 @@ type ReservationForm = {
   requests: string;
 };
 
+type Status =
+  | "idle"
+  | "submitting"
+  | "success"
+  | "error"
+  | "integration";
+
 const initialForm: ReservationForm = {
   date: "",
   time: "",
@@ -34,14 +41,15 @@ const initialForm: ReservationForm = {
   requests: "",
 };
 
+const integrationMessage =
+  "This is a website template. Reservations will be available once the live website is connected to the restaurant's booking system.";
+
 export default function ReservationModal({
   open,
   onClose,
 }: ReservationModalProps) {
   const [form, setForm] = useState<ReservationForm>(initialForm);
-  const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">(
-    "idle"
-  );
+  const [status, setStatus] = useState<Status>("idle");
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
@@ -77,10 +85,10 @@ export default function ReservationModal({
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
+  
     setStatus("submitting");
     setErrorMessage("");
-
+  
     try {
       const response = await fetch("/api/reservations", {
         method: "POST",
@@ -89,23 +97,52 @@ export default function ReservationModal({
         },
         body: JSON.stringify(form),
       });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(
-          data?.message || "We couldn't complete your reservation."
+  
+      // The API route does not exist yet.
+      // This is expected for the portfolio template.
+      if (response.status === 404 || response.status === 405) {
+        setStatus("integration");
+        setErrorMessage(
+          "You're currently viewing a website template. Reservations will be available once the live website is connected to the restaurant's booking system."
         );
+        return;
       }
-
+  
+      const responseText = await response.text();
+  
+      let data: {
+        message?: string;
+        error?: string;
+      } = {};
+  
+      if (responseText.trim()) {
+        try {
+          data = JSON.parse(responseText);
+        } catch {
+          setStatus("integration");
+          setErrorMessage(
+            "This reservation form is ready for backend integration. Once connected to the restaurant's reservation system, your request will be processed and confirmed via the contact details provided."
+          );
+          return;
+        }
+      }
+  
+      if (!response.ok) {
+        setStatus("error");
+        setErrorMessage(
+          data.message ||
+            data.error ||
+            "Something went wrong. Please try again."
+        );
+        return;
+      }
+  
       setStatus("success");
-    } catch (error) {
-      setStatus("error");
-
+    } catch {
+      // Network failure / backend unavailable
+      setStatus("integration");
       setErrorMessage(
-        error instanceof Error
-          ? error.message
-          : "Something went wrong. Please try again."
+        "This reservation form is ready for backend integration. Once connected to the restaurant's reservation system, your request will be processed and confirmed via the contact details provided."
       );
     }
   };
@@ -156,14 +193,15 @@ export default function ReservationModal({
             </h2>
 
             <p>
-              Thank you, {form.name}. We've received your reservation request
-              for {form.guests} {Number(form.guests) === 1 ? "guest" : "guests"}{" "}
-              on {form.date} at {form.time}.
+              Thank you, {form.name}. We've received your reservation
+              request for {form.guests}{" "}
+              {Number(form.guests) === 1 ? "guest" : "guests"} on{" "}
+              {form.date} at {form.time}.
             </p>
 
             <p>
-              We'll contact you at {form.phone} or {form.email} to confirm your
-              table.
+              We'll contact you at {form.phone} or {form.email} to
+              confirm your table.
             </p>
 
             <button
@@ -185,8 +223,7 @@ export default function ReservationModal({
               </h2>
 
               <p>
-                Choose your preferred date and time, and we'll take care of the
-                rest.
+                Fill up the form and leave the rest to us.
               </p>
             </div>
 
@@ -197,8 +234,10 @@ export default function ReservationModal({
               <div className="reservation-form__grid">
                 <label>
                   <span>Date</span>
+
                   <div className="reservation-input">
                     <CalendarDays size={16} />
+
                     <input
                       type="date"
                       value={form.date}
@@ -213,8 +252,10 @@ export default function ReservationModal({
 
                 <label>
                   <span>Preferred time</span>
+
                   <div className="reservation-input">
                     <Clock3 size={16} />
+
                     <input
                       type="time"
                       value={form.time}
@@ -229,8 +270,10 @@ export default function ReservationModal({
 
               <label>
                 <span>Number of guests</span>
+
                 <div className="reservation-input">
                   <Users size={16} />
+
                   <select
                     value={form.guests}
                     onChange={(event) =>
@@ -243,7 +286,8 @@ export default function ReservationModal({
 
                       return (
                         <option key={value} value={value}>
-                          {value} {index === 0 ? "guest" : "guests"}
+                          {value}{" "}
+                          {index === 0 ? "guest" : "guests"}
                         </option>
                       );
                     })}
@@ -254,6 +298,7 @@ export default function ReservationModal({
               <div className="reservation-form__grid">
                 <label>
                   <span>Your name</span>
+
                   <input
                     type="text"
                     value={form.name}
@@ -268,8 +313,10 @@ export default function ReservationModal({
 
                 <label>
                   <span>Phone number</span>
+
                   <div className="reservation-input">
                     <Phone size={16} />
+
                     <input
                       type="tel"
                       value={form.phone}
@@ -286,8 +333,10 @@ export default function ReservationModal({
 
               <label>
                 <span>Email address</span>
+
                 <div className="reservation-input">
                   <Mail size={16} />
+
                   <input
                     type="email"
                     value={form.email}
@@ -302,7 +351,10 @@ export default function ReservationModal({
               </label>
 
               <label>
-                <span>Special requests <small>(optional)</small></span>
+                <span>
+                  Special requests <small>(optional)</small>
+                </span>
+
                 <textarea
                   value={form.requests}
                   onChange={(event) =>
@@ -313,8 +365,22 @@ export default function ReservationModal({
                 />
               </label>
 
+              {status === "integration" && (
+                <div
+                  className="reservation-form__notice"
+                  role="status"
+                >
+                  <strong>Reservation system coming soon. </strong>
+
+                  <span>{errorMessage}</span>
+                </div>
+              )}
+
               {status === "error" && (
-                <div className="reservation-form__error" role="alert">
+                <div
+                  className="reservation-form__error"
+                  role="alert"
+                >
                   {errorMessage}
                 </div>
               )}
@@ -330,7 +396,8 @@ export default function ReservationModal({
               </button>
 
               <p className="reservation-form__note">
-                Your reservation will be confirmed via the email address or phone number provided.
+                Your reservation will be confirmed via the email
+                address or phone number provided.
               </p>
             </form>
           </>
