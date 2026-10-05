@@ -87,7 +87,7 @@ export const site = {
       price: "3,950/=",
       priceValue: 3950,
       tag: "Chef's recommendation",
-      image: "/images/herb-crusted-lamb-rack.png",
+      image: "/images/menu/herb-crusted-lamb-rack.png",
     },
     {
       category: "From the sea",
@@ -95,7 +95,7 @@ export const site = {
       price: "3,250/=",
       priceValue: 3250,
       tag: "Seasonal",
-      image: "/images/seared-scallops.png",
+      image: "/images/menu/seared-scallops.png",
     },
     {
       category: "Pasta",
@@ -103,7 +103,7 @@ export const site = {
       price: "2,450/=",
       priceValue: 2450,
       tag: "House favourite",
-      image: "/images/wild-mushroom-tagliatelle.png",
+      image: "/images/menu/wild-mushroom-tagliatelle.png",
     },
     {
       category: "Dessert",
@@ -111,7 +111,7 @@ export const site = {
       price: "1,350/=",
       priceValue: 1350,
       tag: "To finish",
-      image: "/images/chocolate-delice.png",
+      image: "/images/menu/chocolate-delice.png",
     },
   ] satisfies MenuItem[],
 
@@ -134,30 +134,30 @@ export const site = {
     cta: "Book a Private Table",
     email: "hello@alorakitchen.com",
     subject: "Private dining enquiry",
-    image: "/images/private-dining.png",
+    image: "/images/home/private-dining.png",
     imageAlt: "Private dining room at Alora Kitchen",
   },
 
   gallery: {
     eyebrow: "06 · The Alora mood",
     title: "An experience to",
-    emphasis: "Remember.",
+    emphasis: "remember.",
     items: [
       {
         title: "Slow evenings",
-        image: "/images/slow-evenings.png",
+        image: "/images/home/slow-evenings.png",
         alt: "Slow evenings at Alora Kitchen",
         className: "gallery-tile--large",
       },
       {
         title: "Quality company",
-        image: "/images/quality-company.png",
+        image: "/images/home/quality-company.png",
         alt: "Quality company at Alora Kitchen",
         className: "gallery-tile--warm",
       },
       {
         title: "Quiet elegance",
-        image: "/images/fine-details.png",
+        image: "/images/home/fine-details.png",
         alt: "Quiet elegance at Alora Kitchen",
         className: "gallery-tile--dark",
       },

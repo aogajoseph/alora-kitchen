@@ -24,7 +24,8 @@
    * Change this single path if your generated hero asset
    * has a different filename.
    */
-  --hero-image: url("/images/hero.png");
+  --hero-image: url("/images/home/hero.png");
+  --menu-hero-image: url("/images/menu/menu-hero.png");
 
   /*
    * Header dimensions
@@ -869,8 +870,30 @@ em {
   
   .menu-hero {
     padding: 120px 5vw 105px;
-  
-    border-bottom: 1px solid rgba(23, 23, 19, 0.1);
+
+    background-image:
+    linear-gradient(
+      90deg,
+      rgba(244, 240, 231, .98) 0%,
+      rgba(244, 240, 231, .95) 25%,
+      rgba(244, 240, 231, .82) 39%,
+      rgba(244, 240, 231, .48) 54%,
+      rgba(244, 240, 231, .12) 72%,
+      rgba(244, 240, 231, 0) 100%
+    ),
+    var(--menu-hero-image);
+
+    background-size:
+      cover,
+      cover;
+
+    background-position:
+      center,
+      center right;
+
+    background-repeat:
+      no-repeat,
+      no-repeat;
   }
   
   .menu-hero__content {
@@ -1316,13 +1339,18 @@ em {
     .menu-hero {
       padding: 80px 20px 75px;
     }
+
+    .menu-eyebrow {
+      font-size: 12px;
+    }
   
     .menu-hero h1 {
-      font-size: clamp(52px, 15vw, 80px);
+      font-size: 40px;
     }
   
     .menu-hero__content > p:last-child {
       font-size: 15px;
+      color: #243008;
     }
   
     .menu-category-nav {
@@ -2381,10 +2409,12 @@ body.modal-open {
 
   .gallery-tile {
     height: 420px;
+    margin-top: 30px;
   }
 
   .gallery-tile span {
     font-size: 26px;
+    margin-top: 10px;
   }
 }
 
@@ -2704,10 +2734,12 @@ body.modal-open {
 
   .hero-meta span {
     font-size: 25px;
+    color: #4b6808;
   }
 
   .hero-meta small {
     font-size: 8px;
+    color: #4b6808;
   }
 
   /*

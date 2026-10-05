@@ -87,7 +87,7 @@ export default function Menu() {
           </h1>
 
           <p>
-            Seasonal ingredients, beautifully crafted dishes & memorable moments.
+            Beautiful dishes & Memorable moments
           </p>
         </div>
       </section>
@@ -232,13 +232,6 @@ export default function Menu() {
           <ArrowRight size={16} />
         </button>
 
-        <button
-          className="menu-toggle"
-          aria-label={mobileOpen ? "Close menu" : "Open menu"}
-          onClick={() => setMobileOpen((value) => !value)}
-        >
-          {mobileOpen ? <X size={21} /> : <MenuIcon size={21} />}
-        </button>
       </section>
 
       {/* Footer */}
