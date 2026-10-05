@@ -94,7 +94,10 @@ function App() {
           />
         </a>
 
-        <nav className={`nav ${mobileOpen ? "nav--open" : ""}`}>
+        <nav 
+          id="site-navigation"
+          className={`nav ${mobileOpen ? "nav--open" : ""}`}
+        >
           {site.navigation.map((item) => (
             <a key={item.href} href={item.href} onClick={closeMenu}>
               {item.label}
@@ -111,7 +114,10 @@ function App() {
 
         <button
           className="menu-toggle"
+          type="button"
           aria-label={mobileOpen ? "Close menu" : "Open menu"}
+          aria-expanded={mobileOpen}
+          aria-controls="site-navigation"
           onClick={() => setMobileOpen((value) => !value)}
         >
           {mobileOpen ? <X size={21} /> : <MenuIcon size={21} />}
