@@ -3,7 +3,7 @@ import { type MenuItem } from "./menu";
 export const site = {
   brand: "ALORA",
   descriptor: "KITCHEN",
-  tagline: "Authentic flavors. Timeless moments.",
+  tagline: "Contemporary dining rooted in tradition.",
 
   hero: {
     eyebrow: "Contemporary dining rooted in tradition",
@@ -46,7 +46,7 @@ export const site = {
     body:
       "Alora Kitchen is a modern restaurant celebrating seasonal ingredients, thoughtful preparation and the joy of gathering around the table.",
     cta: "Learn More",
-    href: "#contact",
+    href: "/about",
   },
 
   highlights: [
@@ -195,6 +195,6 @@ export const site = {
 
   footer: {
     copyright: "All rights reserved.",
-    statement: "Contemporary dining rooted in tradition.",
+    statement: "Authentic flavors. Timeless moments.",
   },
 };

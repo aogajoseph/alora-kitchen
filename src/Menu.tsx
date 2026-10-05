@@ -61,7 +61,7 @@ export default function Menu() {
       <header className="menu-header">
         <a className="brand" href="/">
           <img
-            src="/images/logo.png"
+            src="/images/logo-dark.png"
             className="brand-logo"
             alt="Alora Kitchen"
           />
@@ -239,7 +239,7 @@ export default function Menu() {
         <div>
           <a className="brand" href="/">
             <img
-              src="/images/logo.png"
+              src="/images/logo-dark.png"
               className="brand-logo"
               alt="Alora Kitchen"
             />

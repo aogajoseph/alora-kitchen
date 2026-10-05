@@ -23,6 +23,7 @@ import ReservationModal from "./components/ReservationModal";
 import PrivateDiningModal from "./components/PrivateDiningModal";
 import OrderNowModal from "./components/OrderNowModal";
 import Menu from "./Menu";
+import About from "./About";
 
 function App() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -88,7 +89,7 @@ function App() {
           aria-label={`${site.brand} ${site.descriptor} home`}
         >
           <img
-            src="/images/logo.png"
+            src="/images/logo-dark.png"
             alt={`${site.brand} ${site.descriptor}`}
             className="brand-logo"
           />
@@ -375,7 +376,7 @@ function App() {
               aria-label={`${site.brand} ${site.descriptor} home`}
             >
               <img
-                src="/images/footer-logo.png"
+                src="/images/logo-light.png"
                 alt={`${site.brand} ${site.descriptor}`}
                 className="footer-brand-logo"
               />
@@ -461,10 +462,16 @@ function App() {
 
 export default App;
 
-const isMenuPage = window.location.pathname === "/menu";
+const pathname = window.location.pathname;
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    {isMenuPage ? <Menu /> : <App />}
+    {pathname === "/menu" ? (
+      <Menu />
+    ) : pathname === "/about" ? (
+      <About />
+    ) : (
+      <App />
+    )}
   </StrictMode>
 );
