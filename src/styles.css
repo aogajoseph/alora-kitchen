@@ -1277,6 +1277,7 @@ em {
     border-color: var(--about-gold);
   
     color: var(--about-bg);
+    cursor: pointer;
   }
   
   

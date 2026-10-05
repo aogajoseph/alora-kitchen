@@ -96,6 +96,5 @@ export const aboutPage = {
     body:
       "Come as you are, bring someone you love and let us take care of the rest.",
     cta: "Reserve a table",
-    href: "/#reservations",
   },
 };

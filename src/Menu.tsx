@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { ArrowLeft, ArrowRight, Menu as MenuIcon, Clock3, ShoppingBag, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, Clock3, ShoppingBag } from "lucide-react";
 
 import { menuCategories, type MenuItem } from "./content/menu";
 
@@ -10,7 +10,6 @@ import OrderNowModal from "./components/OrderNowModal";
 import "./styles.css";
 
 export default function Menu() {
-  const [mobileOpen, setMobileOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
   const [activeCategory, setActiveCategory] = useState(menuCategories[0]?.id);
   const [reservationOpen, setReservationOpen] = useState(false);
@@ -51,7 +50,6 @@ export default function Menu() {
   }, []);
 
   const openReservations = () => {
-    setMobileOpen(false);
     setReservationOpen(true);
   };
 

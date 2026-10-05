@@ -1,6 +1,9 @@
+import { useState } from "react";
+
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
 import { aboutPage } from "./content/about";
+import ReservationModal from "./components/ReservationModal";
 
 import "./styles.css";
 
@@ -13,6 +16,12 @@ export default function About() {
     values,
     closing,
   } = aboutPage;
+
+  const [reservationOpen, setReservationOpen] = useState(false);
+
+  const openReservations = () => {
+    setReservationOpen(true);
+  };
 
   return (
     <main className="about-page">
@@ -162,7 +171,7 @@ export default function About() {
           <p>{closing.body}</p>
 
           <a
-            href={closing.href}
+            onClick={openReservations}
             className="about-closing__cta"
           >
             {closing.cta}
@@ -187,6 +196,11 @@ export default function About() {
 
         <p>Contemporary dining rooted in tradition.</p>
       </footer>
+
+      <ReservationModal
+        open={reservationOpen}
+        onClose={() => setReservationOpen(false)}
+      />
     </main>
   );
 }
