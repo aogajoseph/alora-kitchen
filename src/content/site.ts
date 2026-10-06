@@ -38,6 +38,12 @@ export const site = {
     { label: "Contact", href: "#contact" },
   ],
 
+  pageLinks: [
+    { label: "Home", href: "/" },
+    { label: "About", href: "/about" },
+    { label: "Menu", href: "/menu" },
+  ],
+
   about: {
     sectionNumber: "02",
     eyebrow: "About Us",

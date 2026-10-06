@@ -4,6 +4,7 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 
 import { aboutPage } from "./content/about";
 import ReservationModal from "./components/ReservationModal";
+import Seo from "./components/Seo";
 
 import "./styles.css";
 
@@ -25,6 +26,13 @@ export default function About() {
 
   return (
     <main className="about-page">
+      <Seo
+        page={{
+          title: "About | Alora Kitchen",
+          description: hero.body,
+          path: "/about",
+        }}
+      />
       {/* Header */}
       <header className="about-header">
         <a

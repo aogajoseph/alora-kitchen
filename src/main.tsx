@@ -22,6 +22,8 @@ import "./styles.css";
 import ReservationModal from "./components/ReservationModal";
 import PrivateDiningModal from "./components/PrivateDiningModal";
 import OrderNowModal from "./components/OrderNowModal";
+import Seo from "./components/Seo";
+
 import Menu from "./Menu";
 import About from "./About";
 
@@ -77,6 +79,13 @@ function App() {
 
   return (
     <div className="site-shell">
+      <Seo
+        page={{
+          title: `${site.brand} | ${site.descriptor}`,
+          description: site.tagline,
+          path: "/",
+        }}
+      />
       <header
         className={`site-header ${
           headerScrolled ? "site-header--scrolled" : ""

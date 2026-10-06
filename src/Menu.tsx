@@ -6,6 +6,7 @@ import { menuCategories, type MenuItem } from "./content/menu";
 
 import ReservationModal from "./components/ReservationModal";
 import OrderNowModal from "./components/OrderNowModal";
+import Seo from "./components/Seo";
 
 import "./styles.css";
 
@@ -55,6 +56,14 @@ export default function Menu() {
 
   return (
     <main className="menu-page">
+      <Seo
+        page={{
+          title: "Menu | Alora Kitchen",
+          description:
+            "Explore the full Alora Kitchen menu, featuring contemporary dining rooted in tradition.",
+          path: "/menu",
+        }}
+      />
       {/* Header */}
       <header className="menu-header">
         <a className="brand" href="/">
