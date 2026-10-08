@@ -8,17 +8,26 @@ import {
   MapPin,
   Minus,
   Phone,
+  User,
+  Mail,
   Plus,
   ShoppingBag,
   X,
 } from "lucide-react";
 
-import { type MenuItem } from "../content/menu";
+import { menuCategories, type MenuItem } from "../content/menu";
+
+type CartItem = MenuItem & {
+  quantity: number;
+};
 
 type OrderNowModalProps = {
-  item: MenuItem | null;
+  cart: CartItem[];
   open: boolean;
   onClose: () => void;
+  onAddItem: (item: MenuItem) => void;
+  onUpdateQuantity: (itemName: string, quantity: number) => void;
+  onRemoveItem: (itemName: string) => void;
 };
 
 type OrderForm = {
@@ -52,31 +61,39 @@ const integrationMessage =
   "You're viewing a website template. Online ordering will be available once the live website is connected to the restaurant's booking system.";
 
 export default function OrderNowModal({
-  item,
+  cart,
   open,
   onClose,
+  onAddItem,
+  onUpdateQuantity,
+  onRemoveItem,
 }: OrderNowModalProps) {
   const [step, setStep] = useState<Step>("order");
-  const [quantity, setQuantity] = useState(1);
   const [form, setForm] = useState<OrderForm>(initialForm);
   const [status, setStatus] = useState<Status>("idle");
   const [errorMessage, setErrorMessage] = useState("");
+  const [addMoreOpen, setAddMoreOpen] = useState(false);
 
   useEffect(() => {
     if (!open) return;
 
     setStep("order");
-    setQuantity(1);
     setForm(initialForm);
     setStatus("idle");
     setErrorMessage("");
-  }, [open, item]);
+    setAddMoreOpen(false);
+  }, [open]);
 
   useEffect(() => {
     if (!open) return;
 
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
+        if (addMoreOpen) {
+          setAddMoreOpen(false);
+          return;
+        }
+
         onClose();
       }
     };
@@ -88,12 +105,21 @@ export default function OrderNowModal({
       document.removeEventListener("keydown", handleEscape);
       document.body.classList.remove("modal-open");
     };
-  }, [open, onClose]);
+  }, [open, onClose, addMoreOpen]);
 
-  const subtotal = useMemo(() => {
-    if (!item) return 0;
-    return item.priceValue * quantity;
-  }, [item, quantity]);
+  const subtotal = useMemo(
+    () =>
+      cart.reduce(
+        (sum, item) => sum + item.priceValue * item.quantity,
+        0
+      ),
+    [cart]
+  );
+
+  const itemCount = useMemo(
+    () => cart.reduce((sum, item) => sum + item.quantity, 0),
+    [cart]
+  );
 
   const deliveryFee = form.fulfillment === "delivery" ? 300 : 0;
   const total = subtotal + deliveryFee;
@@ -112,6 +138,8 @@ export default function OrderNowModal({
   };
 
   const handleContinueToDetails = () => {
+    if (cart.length === 0) return;
+    setAddMoreOpen(false);
     setStep("details");
   };
 
@@ -120,10 +148,14 @@ export default function OrderNowModal({
     setStep("review");
   };
 
+  const handleAddItem = (item: MenuItem) => {
+    onAddItem(item);
+  };
+
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (!item) return;
+    if (cart.length === 0) return;
 
     setStatus("submitting");
     setErrorMessage("");
@@ -135,12 +167,12 @@ export default function OrderNowModal({
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          item: {
+          items: cart.map((item) => ({
             category: item.category,
             name: item.name,
             price: item.priceValue,
-            quantity,
-          },
+            quantity: item.quantity,
+          })),
           fulfillment: form.fulfillment,
           address: form.address,
           customer: {
@@ -195,7 +227,10 @@ export default function OrderNowModal({
     }
   };
 
-  if (!open || !item) return null;
+  if (!open || cart.length === 0) return null;
+
+  const addedItemNames = new Set(cart.map((item) => item.name));
+  const allMenuItems = menuCategories.flatMap((category) => category.items);
 
   return (
     <div
@@ -236,8 +271,8 @@ export default function OrderNowModal({
             </h2>
 
             <p>
-              We've received your order for {quantity}{" "}
-              {quantity === 1 ? "plate" : "plates"} of {item.name}.
+              We've received your order containing {itemCount}{" "}
+              {itemCount === 1 ? "item" : "items"}.
             </p>
 
             <p>
@@ -277,50 +312,79 @@ export default function OrderNowModal({
 
             {step === "order" && (
               <div className="order-modal__content">
-                <div className="order-item">
-                  <div className="order-item__image">
-                    <img src={item.image} alt={item.name} />
-                  </div>
-
-                  <div className="order-item__copy">
-                    <span>{item.category}</span>
-
-                    <h3>{item.name}</h3>
-
-                    <strong>{item.price}</strong>
-
-                    <div className="order-quantity">
-                      <span>Number of plates</span>
-
-                      <div className="order-quantity__controls">
-                        <button
-                          type="button"
-                          aria-label="Decrease quantity"
-                          onClick={() =>
-                            setQuantity((current) =>
-                              Math.max(1, current - 1)
-                            )
-                          }
-                          disabled={quantity === 1}
-                        >
-                          <Minus size={15} />
-                        </button>
-
-                        <strong>{quantity}</strong>
-
-                        <button
-                          type="button"
-                          aria-label="Increase quantity"
-                          onClick={() =>
-                            setQuantity((current) => current + 1)
-                          }
-                        >
-                          <Plus size={15} />
-                        </button>
+                <div className="order-cart">
+                  {cart.map((item) => (
+                    <div className="order-item" key={item.name}>
+                      <div className="order-item__image">
+                        <img src={item.image} alt={item.name} />
                       </div>
+
+                      <div className="order-item__copy">
+                        <span>{item.category}</span>
+
+                        <h3>{item.name}</h3>
+
+                        <strong>{item.price}</strong>
+
+                        <div className="order-quantity">
+                          <span>Quantity</span>
+
+                          <div className="order-quantity__controls">
+                            <button
+                              type="button"
+                              aria-label={`Decrease quantity of ${item.name}`}
+                              onClick={() =>
+                                onUpdateQuantity(
+                                  item.name,
+                                  Math.max(1, item.quantity - 1)
+                                )
+                              }
+                              disabled={item.quantity === 1}
+                            >
+                              <Minus size={15} />
+                            </button>
+
+                            <strong>{item.quantity}</strong>
+
+                            <button
+                              type="button"
+                              aria-label={`Increase quantity of ${item.name}`}
+                              onClick={() =>
+                                onUpdateQuantity(
+                                  item.name,
+                                  item.quantity + 1
+                                )
+                              }
+                            >
+                              <Plus size={15} />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+
+                      <button
+                        type="button"
+                        className="order-item__remove"
+                        aria-label={`Remove ${item.name}`}
+                        onClick={() => onRemoveItem(item.name)}
+                      >
+                        <X size={16} />
+                      </button>
                     </div>
-                  </div>
+                  ))}
                 </div>
+
+                <button
+                  type="button"
+                  className="order-add-more"
+                  onClick={() => setAddMoreOpen(true)}
+                >
+                  <span>
+                    <Plus size={16} />
+                    Add more items to your order
+                  </span>
+                  <ArrowRight size={16} />
+                </button>
 
                 <div className="order-fulfillment">
                   <span className="order-form__label">
@@ -353,9 +417,7 @@ export default function OrderNowModal({
                           ? "order-fulfillment__option is-active"
                           : "order-fulfillment__option"
                       }
-                      onClick={() =>
-                        updateForm("fulfillment", "pickup")
-                      }
+                      onClick={() => updateForm("fulfillment", "pickup")}
                     >
                       <ShoppingBag size={17} />
                       <span>
@@ -403,13 +465,15 @@ export default function OrderNowModal({
                 className="reservation-form"
                 onSubmit={handleContinueToReview}
               >
+                
                 {form.fulfillment === "delivery" && (
                   <label className="reservation-form__field">
-                    <span>Delivery location</span>
+                    <span>
+                      <MapPin size={17} />
+                      Delivery location
+                    </span>
 
                     <div className="reservation-form__input-wrap">
-                      <MapPin size={17} />
-
                       <input
                         type="text"
                         value={form.address}
@@ -424,7 +488,10 @@ export default function OrderNowModal({
                 )}
 
                 <label className="reservation-form__field">
-                  <span>Your name</span>
+                  <span>
+                    <User size={17} />
+                    Your name
+                  </span>
 
                   <input
                     type="text"
@@ -438,11 +505,12 @@ export default function OrderNowModal({
                 </label>
 
                 <label className="reservation-form__field">
-                  <span>Phone number</span>
+                  <span>
+                    <Phone size={17} />
+                    Phone number
+                  </span>
 
                   <div className="reservation-form__input-wrap">
-                    <Phone size={17} />
-
                     <input
                       type="tel"
                       value={form.phone}
@@ -456,7 +524,10 @@ export default function OrderNowModal({
                 </label>
 
                 <label className="reservation-form__field">
-                  <span>Email address</span>
+                  <span>
+                    <Mail size={17} />
+                    Email address
+                  </span>
 
                   <input
                     type="email"
@@ -509,19 +580,25 @@ export default function OrderNowModal({
                 onSubmit={handleSubmit}
               >
                 <div className="order-review">
-                  <div className="order-review__item">
-                    <img src={item.image} alt={item.name} />
+                  <div className="order-review__items">
+                    {cart.map((item) => (
+                      <div className="order-review__item" key={item.name}>
+                        <img src={item.image} alt={item.name} />
 
-                    <div>
-                      <span>{item.category}</span>
-                      <h3>{item.name}</h3>
-                      <p>
-                        {quantity}{" "}
-                        {quantity === 1 ? "plate" : "plates"}
-                      </p>
-                    </div>
+                        <div>
+                          <span>{item.category}</span>
+                          <h3>{item.name}</h3>
+                          <p>
+                            {item.quantity}{" "}
+                            {item.quantity === 1 ? "item" : "items"}
+                          </p>
+                        </div>
 
-                    <strong>{formatPrice(subtotal)}</strong>
+                        <strong>
+                          {formatPrice(item.priceValue * item.quantity)}
+                        </strong>
+                      </div>
+                    ))}
                   </div>
 
                   <div className="order-review__details">
@@ -612,9 +689,7 @@ export default function OrderNowModal({
                     className="button button--dark"
                     disabled={status === "submitting"}
                   >
-                    {status === "submitting"
-                      ? "Processing..."
-                      : "Place order"}
+                    {status === "submitting" ? "Processing..." : "Place order"}
                     {status !== "submitting" && (
                       <ArrowRight size={16} />
                     )}
@@ -635,6 +710,74 @@ export default function OrderNowModal({
                 Orders are prepared fresh and subject to availability.
               </span>
             </div>
+          </>
+        )}
+
+        {addMoreOpen && status !== "success" && (
+          <>
+            <button
+              type="button"
+              className="order-add-more__backdrop"
+              aria-label="Close menu"
+              onClick={() => setAddMoreOpen(false)}
+            />
+
+            <aside className="order-add-more__drawer" aria-label="Add more items">
+              <div className="order-add-more__header">
+                <div>
+                  <p className="eyebrow">Add to your order</p>
+                  <h3>More from the menu</h3>
+                </div>
+
+                <button
+                  type="button"
+                  className="order-add-more__close"
+                  onClick={() => setAddMoreOpen(false)}
+                  aria-label="Close menu"
+                >
+                  <X size={19} />
+                </button>
+              </div>
+
+              <div className="order-add-more__list">
+                {allMenuItems.map((item) => {
+                  const isAdded = addedItemNames.has(item.name);
+
+                  return (
+                    <div
+                      className={`order-add-more__item${
+                        isAdded ? " is-added" : ""
+                      }`}
+                      key={item.name}
+                    >
+                      <div className="order-add-more__image">
+                        <img src={item.image} alt="" />
+                      </div>
+
+                      <div className="order-add-more__copy">
+                        <span>{item.category}</span>
+                        <strong>{item.name}</strong>
+                        <small>{item.price}</small>
+                      </div>
+
+                      <button
+                        type="button"
+                        className="order-add-more__button"
+                        onClick={() => handleAddItem(item)}
+                        aria-label={
+                          isAdded
+                            ? `${item.name} added. Add another`
+                            : `Add ${item.name}`
+                        }
+                      >
+                        {isAdded ? <Check size={15} /> : <Plus size={15} />}
+                        <span>{isAdded ? "Added" : "Add"}</span>
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            </aside>
           </>
         )}
       </div>

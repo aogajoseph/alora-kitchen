@@ -105,7 +105,7 @@ export default function Seo({ page }: SeoProps) {
     upsertMeta("property", "og:type", "website");
     upsertMeta("property", "og:site_name", siteName);
     upsertMeta("property", "og:locale", "en");
-    upsertMeta("property", "og:image", image);
+    upsertMeta("property", "og:image", image); 
     upsertMeta("property", "og:image:alt", imageAlt);
 
     upsertMeta("name", "twitter:card", seoDefaults.twitterCard);

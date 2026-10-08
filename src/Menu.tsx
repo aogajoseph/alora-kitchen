@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 
-import { ArrowLeft, ArrowRight, Clock3, ShoppingBag } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  Clock3,
+  ShoppingBag,
+} from "lucide-react";
 
 import { menuCategories, type MenuItem } from "./content/menu";
 
@@ -10,14 +15,17 @@ import Seo from "./components/Seo";
 
 import "./styles.css";
 
-export default function Menu() {
-  const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
-  const [activeCategory, setActiveCategory] = useState(menuCategories[0]?.id);
-  const [reservationOpen, setReservationOpen] = useState(false);
+type CartItem = MenuItem & {
+  quantity: number;
+};
 
-  const openOrder = (item: MenuItem) => {
-    setSelectedItem(item);
-  };
+export default function Menu() {
+  const [cart, setCart] = useState<CartItem[]>([]);
+  const [activeCategory, setActiveCategory] = useState(
+    menuCategories[0]?.id
+  );
+  const [reservationOpen, setReservationOpen] = useState(false);
+  const [orderOpen, setOrderOpen] = useState(false);
 
   useEffect(() => {
     const sections = menuCategories
@@ -50,6 +58,57 @@ export default function Menu() {
     return () => observer.disconnect();
   }, []);
 
+  const addToCart = (item: MenuItem) => {
+    setCart((current) => {
+      const existingItem = current.find(
+        (cartItem) => cartItem.name === item.name
+      );
+
+      if (existingItem) {
+        return current.map((cartItem) =>
+          cartItem.name === item.name
+            ? {
+                ...cartItem,
+                quantity: cartItem.quantity + 1,
+              }
+            : cartItem
+        );
+      }
+
+      return [
+        ...current,
+        {
+          ...item,
+          quantity: 1,
+        },
+      ];
+    });
+
+    setOrderOpen(true);
+  };
+
+  const updateCartQuantity = (
+    itemName: string,
+    quantity: number
+  ) => {
+    setCart((current) =>
+      current.map((item) =>
+        item.name === itemName
+          ? {
+              ...item,
+              quantity,
+            }
+          : item
+      )
+    );
+  };
+
+  const removeFromCart = (itemName: string) => {
+    setCart((current) =>
+      current.filter((item) => item.name !== itemName)
+    );
+  };
+
   const openReservations = () => {
     setReservationOpen(true);
   };
@@ -64,6 +123,7 @@ export default function Menu() {
           path: "/menu",
         }}
       />
+
       {/* Header */}
       <header className="menu-header">
         <a className="brand" href="/">
@@ -196,7 +256,7 @@ export default function Menu() {
                       type="button"
                       className="menu-item__order"
                       onClick={() =>
-                        openOrder({
+                        addToCart({
                           ...item,
                           category: category.label,
                         })
@@ -227,18 +287,18 @@ export default function Menu() {
         </h2>
 
         <p>
-          Order your favourites online or request a table to join us.
+          Order your favourites online or request a table to
+          join us.
         </p>
 
-        <button 
+        <button
           type="button"
-          className="menu-closing__cta" 
+          className="menu-closing__cta"
           onClick={openReservations}
         >
           Reserve a table
           <ArrowRight size={16} />
         </button>
-
       </section>
 
       {/* Footer */}
@@ -257,9 +317,12 @@ export default function Menu() {
       </footer>
 
       <OrderNowModal
-        item={selectedItem}
-        open={Boolean(selectedItem)}
-        onClose={() => setSelectedItem(null)}
+        cart={cart}
+        open={orderOpen}
+        onClose={() => setOrderOpen(false)}
+        onAddItem={addToCart}
+        onUpdateQuantity={updateCartQuantity}
+        onRemoveItem={removeFromCart}
       />
 
       <ReservationModal

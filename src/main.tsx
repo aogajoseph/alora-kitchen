@@ -27,12 +27,16 @@ import Seo from "./components/Seo";
 import Menu from "./Menu";
 import About from "./About";
 
+type CartItem = MenuItem & {
+  quantity: number;
+};
+
 function App() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [headerScrolled, setHeaderScrolled] = useState(false);
   const [reservationOpen, setReservationOpen] = useState(false);
   const [privateDiningOpen, setPrivateDiningOpen] = useState(false);
-  const [orderItem, setOrderItem] = useState<MenuItem | null>(null);
+  const [orderCart, setOrderCart] = useState<CartItem[]>([]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -74,7 +78,65 @@ function App() {
   };
 
   const openOrderNow = (item: MenuItem) => {
-    setOrderItem(item);
+    setOrderCart([
+      {
+        ...item,
+        quantity: 1,
+      },
+    ]);
+  };
+
+  const addToOrder = (item: MenuItem) => {
+    setOrderCart((current) => {
+      const existing = current.find(
+        (cartItem) => cartItem.name === item.name
+      );
+  
+      if (existing) {
+        return current.map((cartItem) =>
+          cartItem.name === item.name
+            ? {
+                ...cartItem,
+                quantity: cartItem.quantity + 1,
+              }
+            : cartItem
+        );
+      }
+  
+      return [
+        ...current,
+        {
+          ...item,
+          quantity: 1,
+        },
+      ];
+    });
+  };
+  
+  const updateOrderQuantity = (
+    itemName: string,
+    quantity: number
+  ) => {
+    setOrderCart((current) =>
+      current.map((item) =>
+        item.name === itemName
+          ? {
+              ...item,
+              quantity: Math.max(1, quantity),
+            }
+          : item
+      )
+    );
+  };
+  
+  const removeFromOrder = (itemName: string) => {
+    setOrderCart((current) =>
+      current.filter((item) => item.name !== itemName)
+    );
+  };
+
+  const closeOrder = () => {
+    setOrderCart([]);
   };
 
   return (
@@ -461,9 +523,12 @@ function App() {
       />
 
       <OrderNowModal
-        item={orderItem}
-        open={Boolean(orderItem)}
-        onClose={() => setOrderItem(null)}
+        cart={orderCart}
+        open={orderCart.length > 0}
+        onClose={closeOrder}
+        onAddItem={addToOrder}
+        onUpdateQuantity={updateOrderQuantity}
+        onRemoveItem={removeFromOrder}
       />
     </div>
   );
